@@ -25,5 +25,3 @@ This operation is going to drop the current db.
 This operation will create a new collection with the given name.
 
 > db.<collection_name>.insertOne({"name" : "Hari"})
-
-# CRUD Operations
