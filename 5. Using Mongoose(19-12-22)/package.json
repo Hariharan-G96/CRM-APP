@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "mongoose": "^6.8.0"
+  },
+  "name": "using-mongoose",
+  "description": "1. Install Mongoose\r    npm i mongoose --save",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Using",
+    "Mongoose"
+  ],
+  "author": "Hariharan",
+  "license": "ISC"
+}
