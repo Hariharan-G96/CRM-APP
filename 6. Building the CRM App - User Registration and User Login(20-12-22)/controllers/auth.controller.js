@@ -9,7 +9,7 @@ exports.signUp = async (req, res) => {
     let userStatus = req.body.userStatus;
 
     if(!userStatus){
-        if(req.userType === userTypes.engineer || req.userType === userTypes.admin){
+        if(req.body.userType === userTypes.engineer || req.body.userType === userTypes.admin){
             userStatus = constants.userStatus.pending
         }
         else{
@@ -43,4 +43,46 @@ exports.signUp = async (req, res) => {
         console.log('Something went wrong while saving to DB ', err.message)
         res.status(500).send({message : "Some internal error while inserting the element"})
     }
+}
+
+exports.signIn = async (req, res) => {
+    const user = await User.findOne({ userId : req.body.userId })
+    console.log("Sign in request for ", user)
+
+    if(!user){
+        res.status(400).send({
+            message: "Failed! UserId doesn't exist!"
+        })
+        return
+    }
+
+    if(user.userStatus != constants.userStatus.approved){
+        res.status(403).send({
+            message: `Can't allow login as user is in status: [${user.userStatus}]`
+        })
+        return
+    }
+
+    let isValidPassword = bcrypt.compareSync(req.body.password, user.password)
+
+    if(!isValidPassword){
+        res.status(401).send({
+            accessToken : null,
+            message: 'Invalid Credentials!'
+        })
+        return
+    }
+
+    let token = jwt.sign({ id: user.userId }, config.secretKey, { 
+        expiresIn : 86400 // 24 hours
+    })
+
+    res.status(200).send({
+        name: user.name,
+        userId: user.userId,
+        email: user.email,
+        userType: user.userType,
+        userStatus: user.userStatus,
+        accessToken: token
+    })
 }
