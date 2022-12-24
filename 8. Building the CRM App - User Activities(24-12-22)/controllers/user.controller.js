@@ -141,6 +141,7 @@ exports.findById = async (req, res) => {
 }
 
 exports.update = async (req, res) => {
+    // http://localhost:3000/crm/api/users/kanc2571
     const userIdReq = req.params.userId
 
     try{
