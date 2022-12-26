@@ -40,10 +40,8 @@ db.once("open", () => {
     init()
 })
 
-let authRouter = require('./routes/auth.routes')
-authRouter(app)
-
-let userRouter = require('./routes/user.routes')
-userRouter(app)
+require('./routes/auth.routes')(app)
+require('./routes/user.routes')(app)
+require('./routes/ticket.routes')(app)
 
 app.listen(3000, () => console.log("Listening at localhost:3000"))
