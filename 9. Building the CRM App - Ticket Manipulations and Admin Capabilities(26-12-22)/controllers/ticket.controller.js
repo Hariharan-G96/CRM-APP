@@ -92,11 +92,3 @@ exports.updateTicket = async (req, res) => {
         })
     }
 }
-
-exports.getAllTickets = async (req, res) => {
-
-}
-
-exports.getOneTicket = async (req, res) => {
-
-}
