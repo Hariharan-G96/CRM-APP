@@ -4,6 +4,7 @@ const constants = require('../utils/constants')
 const objectConverter = require('../utils/objectConverter')
 
 exports.createTicket = async (req, res) => {
+    http://localhost:3000/crm/api/ticket/create/
     const ticketObject = {
         title : req.body.title,
         ticketPriority : req.body.ticketPriority,
@@ -57,7 +58,7 @@ const canUpdate = (user, ticket) => {
 }
 
 exports.updateTicket = async (req, res) => {
-
+    http://localhost:3000/crm/api/ticket/update/<ticket._id>
     const savedUser = await User.findOne({
         userId : req.body.userId
     })
