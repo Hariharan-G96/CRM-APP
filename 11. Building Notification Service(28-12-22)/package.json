@@ -1,0 +1,16 @@
+{
+  "name": "notification-service",
+  "version": "1.0.0",
+  "description": "the service to send notifications to the users of crm app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hariharan",
+  "license": "ISC",
+  "dependencies": {
+    "cron": "^2.1.0",
+    "mongoose": "^6.8.2",
+    "node-cron": "^3.0.2"
+  }
+}
