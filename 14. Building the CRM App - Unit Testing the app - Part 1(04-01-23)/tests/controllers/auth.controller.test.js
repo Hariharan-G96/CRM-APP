@@ -15,7 +15,7 @@ const testPayload = {
     name: "Test",
     userId: 1,
     email: "test@relevel.com",
-    userStatus: "APPROVED",
+    userStatus: "PENDING",
     ticketsCreated: [],
     ticketsAssigned: []
 }
@@ -77,5 +77,54 @@ describe('SignIn', () => {
             accessToken : null,
             message: 'Invalid Credentials!'
         })
+    })
+
+    it("shouldn't allow users who aren't approved", async() => {
+        testPayload.userStatus = 'PENDING'
+        const userSpy = jest.spyOn(User, 'findOne').mockReturnValue(Promise.resolve(testPayload))
+        const req = mockRequest(), res = mockResponse()
+        req.body = testPayload
+
+        await signIn(req, res)
+        expect(userSpy).toHaveBeenCalled()
+        expect(res.status).toHaveBeenCalledWith(403)
+        expect(res.send).toHaveBeenCalledWith({
+            message: `Can't allow login as user is in status: [PENDING]`
+        })
+    })
+
+    it("should fail if the user doesn't exist", async () => {
+        const userSpy = jest.spyOn(User, 'findOne').mockReturnValue(null)
+        const req = mockRequest(), res = mockResponse()
+        req.body = testPayload
+
+        await signIn(req, res)
+        expect(userSpy).toHaveBeenCalled
+        expect(res.status).toHaveBeenCalledWith(400)
+        expect(res.send).toHaveBeenCalledWith({
+            message: "Failed! UserId doesn't exist!"
+        })
+    })
+
+    it("should pass", async () => {
+        testPayload.userStatus = 'APPROVED'
+        const userSpy = jest.spyOn(User, 'findOne').mockReturnValue(Promise.resolve(testPayload))
+        const bcryptSpy = jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true)
+        const req = mockRequest(), res = mockResponse()
+        req.body = testPayload
+
+        await signIn(req, res)
+        expect(userSpy).toHaveBeenCalled()
+        expect(bcryptSpy).toHaveBeenCalled()
+        expect(res.status).toHaveBeenCalledWith(200)
+        expect(res.send).toHaveBeenCalledWith(
+            expect.objectContaining({
+                name: testPayload.name,
+                userId: testPayload.userId,
+                email: testPayload.email,
+                userType: testPayload.userType,
+                userStatus: testPayload.userStatus
+            })
+        )
     })
 })

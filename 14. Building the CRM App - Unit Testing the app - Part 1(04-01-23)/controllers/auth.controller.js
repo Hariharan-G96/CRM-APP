@@ -7,15 +7,13 @@ const config = require('../configs/auth.config')
 
 exports.signUp = async (req, res) => {
     // http://localhost:3000/crm/api/auth/signup   
-    let userStatus = req.body.userStatus;
+    let userStatus;
 
-    if(!userStatus){
-        if(req.body.userType === userTypes.engineer || req.body.userType === userTypes.admin){
-            userStatus = constants.userStatus.pending
-        }
-        else{
-            userStatus = constants.userStatus.approved
-        }
+    if(req.body.userType === userTypes.engineer || req.body.userType === userTypes.admin){
+        userStatus = constants.userStatus.pending
+    }
+    else{
+        userStatus = constants.userStatus.approved
     }
 
     const userObj = {
