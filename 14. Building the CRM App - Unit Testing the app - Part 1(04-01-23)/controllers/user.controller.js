@@ -12,13 +12,13 @@ const fetchAll = async (res) => {
 
     try{
         users = await User.find()
+        return users
     }catch(err){
         console.log("error while fetching the users")
         res.status(500).send({
             message: "Internal Server Error"
         })
     }
-    return users
 }
 
 const fetchByName = async(userNameReq, res) => {
@@ -28,13 +28,13 @@ const fetchByName = async(userNameReq, res) => {
         users = await User.find({
             name : userNameReq
         })
+        return users
     }catch(err){
         console.log("error while fetching the users of userName : ", userNameReq)
         res.status(500).send({
             message: "Internal Server Error"
         })
     }
-    return users
 }
 
 const fetchByTypeAndStatus = async(userTypeReq, userStatusReq, res) => {
@@ -45,13 +45,13 @@ const fetchByTypeAndStatus = async(userTypeReq, userStatusReq, res) => {
             userType : userTypeReq,
             userStatus : userStatusReq
         })
+        return users
     }catch(err){
         console.log(`error while fetching the users of userType [${userTypeReq}] and userStatus [${userStatusReq}]`)
         res.status(500).send({
             message: "Internal Server Error"
         })
     }
-    return users
 }
 
 const fetchByType = async(userTypeReq, res) => {
@@ -61,13 +61,13 @@ const fetchByType = async(userTypeReq, res) => {
         users = await User.find({
             userType : userTypeReq
         })
+        return users
     }catch(err){
         console.log(`error while fetching the users of userType [${userTypeReq}]`)
         res.status(500).send({
             message: "Internal Server Error"
         })
     }
-    return users
 }
 
 const fetchByStatus = async(userStatusReq, res) => {
@@ -77,13 +77,13 @@ const fetchByStatus = async(userStatusReq, res) => {
         users = await User.find({
             userStatus : userStatusReq
         })
+        return users
     }catch(err){
         console.log(`error while fetching the users of userStatus [${userStatusReq}]`)
         res.status(500).send({
             message: "Internal Server Error"
         })
     }
-    return users
 }
 
 /**
@@ -112,7 +112,15 @@ exports.findAll = async (req, res) => {
     else{
         users = await fetchAll(res)
     }
-    res.status(200).send(objectConverter.userResponse(users))
+
+    if(users){
+        res.status(200).send(objectConverter.userResponse(users))
+    }
+    else{
+        res.status(500).send({
+            message : 'No Users found!'
+        })
+    } 
 }
 
 exports.findById = async (req, res) => {
