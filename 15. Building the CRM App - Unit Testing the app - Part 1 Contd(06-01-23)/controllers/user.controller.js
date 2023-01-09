@@ -132,18 +132,18 @@ exports.findById = async (req, res) => {
         user = await User.find({
             userId : userIdReq
         })
-    }catch(err){
+
+        if(user.length > 0){
+            res.status(200).send(objectConverter.userResponse(user))
+        }
+        else{
+            res.status(500).send({
+                message: `User with id : [${userIdReq}] does not exist`
+            })
+        }
+    } catch(err){
         res.status(500).send({
             message: "Internal Server Error"
-        })
-    }
-
-    if(user.length > 0){
-        res.status(200).send(objectConverter.userResponse(user))
-    }
-    else{
-        res.status(500).send({
-            message: `User with id : ${userIdReq} does not exist`
         })
     }
 }
